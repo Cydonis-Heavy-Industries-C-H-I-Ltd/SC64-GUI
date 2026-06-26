@@ -45,7 +45,7 @@ void Sc64Worker::connectPort(const QString &port)
         return;
     }
     const QString idStr = QString::fromLatin1(id);
-    if (idStr != QStringLiteral("SC64")) {
+    if (idStr != QStringLiteral("SCv2")) {
         m_device->close();
         emit connectionChanged(false, QStringLiteral("Unexpected identifier: ") + idStr);
         return;
