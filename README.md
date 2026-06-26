@@ -93,8 +93,7 @@ sudo udevadm control --reload-rules && sudo udevadm trigger   # then replug
 
 The manifest adds `--device=all` (USB/serial) and `--filesystem=home:ro` (to read
 files you copy). `QtSerialPort` and the QML modules are already in the KDE
-runtime; FatFs is compiled from the bundled sources. CI/release workflows carry
-over from the foundation project.
+runtime; FatFs is compiled from the bundled sources.
 
 ## Validating the FatFs layer without hardware
 
