@@ -1,4 +1,5 @@
-# SC64 File Transfer — Qt GUI
+![Logo](https://raw.githubusercontent.com/Cydonis-Heavy-Industries-C-H-I-Ltd/SC64-GUI/8ced14fd5d1f48b8ebc6d19d20cd3b72dff8a14a/packaging/sc64gui.svg)
+# SC64 File Transfer Tool — Qt GUI
 
 A graphical front-end for the [SummerCart64](https://github.com/Polprzewodnikowy/SummerCart64)
 N64 flashcart. The SC64 USB protocol is reimplemented directly in C++/Qt
