@@ -1,0 +1,3 @@
+# SummerCart64 (FTDI FT232H) — allow non-root access
+SUBSYSTEM=="usb", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6014", MODE="0666", TAG+="uaccess"
+SUBSYSTEM=="tty", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6014", MODE="0666", TAG+="uaccess"

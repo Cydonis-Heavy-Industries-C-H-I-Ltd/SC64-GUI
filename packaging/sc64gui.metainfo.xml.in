@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>@APP_ID@</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>MIT</project_license>
+  <developer id="io.github.example">
+    <name>Example Developer</name>
+  </developer>
+  <name>SC64 File Transfer</name>
+  <summary>Send ROMs and files to a SummerCart64 over USB</summary>
+  <description>
+    <p>
+      A Qt GUI for the SummerCart64 Nintendo 64 flashcart. Enumerates the cart
+      over USB, connects, and uploads N64 ROMs into the cart memory with a
+      progress bar. A graphical alternative to the command-line deployer.
+    </p>
+  </description>
+  <launchable type="desktop-id">@APP_ID@.desktop</launchable>
+  <url type="homepage">https://github.com/example/sc64-gui</url>
+  <provides>
+    <binary>sc64gui</binary>
+  </provides>
+  <releases>
+    <release version="0.1" date="2026-06-26"/>
+  </releases>
+  <content_rating type="oars-1.1"/>
+</component>

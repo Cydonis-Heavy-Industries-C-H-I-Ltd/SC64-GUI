@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=SC64 File Transfer
+Comment=Send ROMs and files to a SummerCart64 over USB
+Exec=sc64gui
+Icon=@APP_ID@
+Terminal=false
+Categories=Utility;
