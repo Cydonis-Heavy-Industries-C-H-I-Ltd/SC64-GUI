@@ -5,6 +5,8 @@ N64 flashcart. The SC64 USB protocol is reimplemented directly in C++/Qt
 (`QtSerialPort`) — no Rust, no FFI, no child process — and SD-card files are
 handled through a vendored **FatFs**, so existing data on the card is preserved.
 
+**(c) [2026 Cydonis Heavy Industries.](https://cydonis.co.uk/about) & contributors.**
+
 ## What it does today
 
 - Enumerates SC64 devices by USB VID/PID (FTDI `0x0403:0x6014`).
@@ -112,7 +114,7 @@ QML load, install/packaging metadata, and the **FatFs mount/write/list logic**
 serial commands underneath `writeSectors`/`readSectors` — needs a real cart to
 exercise end to end.
 
-## Not done yet (natural next steps)
+## Not done yet/todo:
 
 - **Subdirectory navigation** and delete/rename/mkdir on the card.
 - **Booting an uploaded ROM** (CIC/boot-mode config + N64 reset).
