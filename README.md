@@ -121,3 +121,4 @@ exercise end to end.
 - **exFAT note:** enabled in the config, but SDXC cards formatted exFAT carry
   Microsoft patent considerations; FAT32 is the common, friction-free case.
 - **Cancellable transfers** and an FTDI raw-USB fast path (libusb).
+- **Windows and Android ports... maybe. ;-P
