@@ -1,12 +1,9 @@
-![Logo](https://raw.githubusercontent.com/Cydonis-Heavy-Industries-C-H-I-Ltd/SC64-GUI/8ced14fd5d1f48b8ebc6d19d20cd3b72dff8a14a/packaging/sc64gui.svg) ![Logo2](https://github.com/Cydonis-Heavy-Industries-C-H-I-Ltd/SC64-GUI/blob/main/n64-logo.png?raw=true) <br>
-# SC64 File Transfer Tool — Qt GUI
+# SC64 File Transfer — Qt GUI
 
 A graphical front-end for the [SummerCart64](https://github.com/Polprzewodnikowy/SummerCart64)
 N64 flashcart. The SC64 USB protocol is reimplemented directly in C++/Qt
 (`QtSerialPort`) — no Rust, no FFI, no child process — and SD-card files are
 handled through a vendored **FatFs**, so existing data on the card is preserved.
-
-**(c) [2026 Cydonis Heavy Industries.](https://cydonis.co.uk/about) & contributors.**
 
 ## What it does today
 
@@ -17,7 +14,9 @@ handled through a vendored **FatFs**, so existing data on the card is preserved.
 - **Safely copies files onto the SD card.** Mounts the existing FAT/exFAT volume
   with FatFs and uses `f_write`, so only the FAT, the directory entry, and the
   new file's clusters are touched — everything else on the card is left intact.
-- Lists the card's root directory (names, sizes, folders).
+- Browses the card's filesystem: navigate into folders and back up, and
+  **create folders, rename, and delete** (folders delete recursively). Listings
+  show names, sizes, and folder markers.
 - Runs all serial I/O on a worker thread, so the UI never freezes.
 
 The protocol and the FatFs configuration come straight from the upstream
@@ -94,7 +93,24 @@ sudo udevadm control --reload-rules && sudo udevadm trigger   # then replug
 
 The manifest adds `--device=all` (USB/serial) and `--filesystem=home:ro` (to read
 files you copy). `QtSerialPort` and the QML modules are already in the KDE
-runtime; FatFs is compiled from the bundled sources.
+runtime; FatFs is compiled from the bundled sources. CI/release workflows carry
+over from the foundation project.
+
+## AppImage
+
+A single-file, no-install build is produced by `.github/workflows/appimage.yml`
+on every push (as a workflow artifact) and attached to GitHub Releases on tags.
+To run one:
+
+```bash
+chmod +x SC64_File_Transfer-x86_64.AppImage
+./SC64_File_Transfer-x86_64.AppImage
+```
+
+It bundles Qt, the QML modules, and the serial-port plugin via `linuxdeploy`, so
+it runs on most recent x86_64 distros without installing anything. The udev rule
+(below) is still needed for non-root access to the cart, since that's a host-side
+permission the bundle can't grant.
 
 ## Validating the FatFs layer without hardware
 
@@ -104,6 +120,7 @@ intact (and long filenames survive). Build and run it with:
 
 ```bash
 gcc -I third_party/fatfs test/fatfs_ramdisk_test.c build/libfatfs.a -o fftest && ./fftest
+gcc -I third_party/fatfs test/fatfs_ops_test.c    build/libfatfs.a -o opstest && ./opstest
 ```
 
 ## Status
@@ -114,12 +131,10 @@ QML load, install/packaging metadata, and the **FatFs mount/write/list logic**
 serial commands underneath `writeSectors`/`readSectors` — needs a real cart to
 exercise end to end.
 
-## Not done yet/todo:
+## Not done yet (natural next steps)
 
-- **Subdirectory navigation** and delete/rename/mkdir on the card.
 - **Booting an uploaded ROM** (CIC/boot-mode config + N64 reset).
 - **Saves and 64DD IPL** uploads (same memory-write at different addresses).
 - **exFAT note:** enabled in the config, but SDXC cards formatted exFAT carry
   Microsoft patent considerations; FAT32 is the common, friction-free case.
 - **Cancellable transfers** and an FTDI raw-USB fast path (libusb).
-- **Windows and Android ports... maybe. ;-P

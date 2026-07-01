@@ -27,6 +27,10 @@ public:
 
     bool list(const QString &path, QList<Entry> *out, QString *error);
 
+    bool mkdir(const QString &path, QString *error);
+    bool rename(const QString &oldPath, const QString &newPath, QString *error);
+    bool remove(const QString &path, QString *error); // recursive for directories
+
     // Copy a host file into the card at `cardPath` (e.g. "/roms/game.z64").
     bool copyToCard(const QString &hostPath, const QString &cardPath,
                     Sc64Device::ProgressFn progress, QString *error);
