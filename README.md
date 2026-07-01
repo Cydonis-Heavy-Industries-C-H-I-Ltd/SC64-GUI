@@ -1,4 +1,3 @@
-![Logo](https://raw.githubusercontent.com/Cydonis-Heavy-Industries-C-H-I-Ltd/SC64-GUI/8ced14fd5d1f48b8ebc6d19d20cd3b72dff8a14a/packaging/sc64gui.svg)
 ![Logo](https://raw.githubusercontent.com/Cydonis-Heavy-Industries-C-H-I-Ltd/SC64-GUI/8ced14fd5d1f48b8ebc6d19d20cd3b72dff8a14a/packaging/sc64gui.svg) ![Logo2](https://github.com/Cydonis-Heavy-Industries-C-H-I-Ltd/SC64-GUI/blob/main/n64-logo.png?raw=true) <br>
 # SC64 File Transfer — Qt GUI
 
