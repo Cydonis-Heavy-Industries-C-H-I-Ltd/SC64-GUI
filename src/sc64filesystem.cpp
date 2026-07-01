@@ -118,6 +118,87 @@ bool Sc64FileSystem::list(const QString &path, QList<Entry> *out, QString *error
     return true;
 }
 
+namespace {
+
+FRESULT removeRecursive(const QByteArray &path)
+{
+    FILINFO fno;
+    FRESULT fr = f_stat(path.constData(), &fno);
+    if (fr != FR_OK)
+        return fr;
+
+    if (fno.fattrib & AM_DIR) {
+        DIR dir;
+        fr = f_opendir(&dir, path.constData());
+        if (fr != FR_OK)
+            return fr;
+        for (;;) {
+            FILINFO e;
+            fr = f_readdir(&dir, &e);
+            if (fr != FR_OK) {
+                f_closedir(&dir);
+                return fr;
+            }
+            if (e.fname[0] == 0)
+                break; // f_readdir does not return "." or ".."
+            QByteArray child = path;
+            child.append('/');
+            child.append(e.fname);
+            fr = removeRecursive(child);
+            if (fr != FR_OK) {
+                f_closedir(&dir);
+                return fr;
+            }
+        }
+        f_closedir(&dir);
+    }
+    return f_unlink(path.constData());
+}
+
+} // namespace
+
+bool Sc64FileSystem::mkdir(const QString &path, QString *error)
+{
+    if (!m_mounted && !mount(error))
+        return false;
+    sc64_fatfs_set_device(m_device);
+    FRESULT fr = f_mkdir(path.toUtf8().constData());
+    if (fr != FR_OK) {
+        if (error)
+            *error = frToString(fr);
+        return false;
+    }
+    return true;
+}
+
+bool Sc64FileSystem::rename(const QString &oldPath, const QString &newPath, QString *error)
+{
+    if (!m_mounted && !mount(error))
+        return false;
+    sc64_fatfs_set_device(m_device);
+    FRESULT fr = f_rename(oldPath.toUtf8().constData(), newPath.toUtf8().constData());
+    if (fr != FR_OK) {
+        if (error)
+            *error = frToString(fr);
+        return false;
+    }
+    return true;
+}
+
+bool Sc64FileSystem::remove(const QString &path, QString *error)
+{
+    if (!m_mounted && !mount(error))
+        return false;
+    sc64_fatfs_set_device(m_device);
+    FRESULT fr = removeRecursive(path.toUtf8());
+    if (fr != FR_OK) {
+        if (error)
+            *error = frToString(fr);
+        return false;
+    }
+    return true;
+}
+
 bool Sc64FileSystem::copyToCard(const QString &hostPath, const QString &cardPath,
                                 Sc64Device::ProgressFn progress, QString *error)
 {
