@@ -35,22 +35,30 @@ qt_add_qml_module(sc64gui
 
 target_link_libraries(sc64gui PRIVATE Qt6::Quick Qt6::SerialPort fatfs)
 
+# On Windows, build as a GUI app so no console window appears (Qt supplies WinMain).
+if(WIN32)
+    set_target_properties(sc64gui PROPERTIES WIN32_EXECUTABLE TRUE)
+endif()
+
 # ---- Packaging / install rules (used by Flatpak and `cmake --install`) ----
 set(APP_ID "io.github.example.Sc64Gui" CACHE STRING "Reverse-DNS app id")
 include(GNUInstallDirs)
 
 install(TARGETS sc64gui RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 
-configure_file(${CMAKE_SOURCE_DIR}/packaging/sc64gui.desktop.in
-               ${CMAKE_BINARY_DIR}/${APP_ID}.desktop @ONLY)
-install(FILES ${CMAKE_BINARY_DIR}/${APP_ID}.desktop
-        DESTINATION ${CMAKE_INSTALL_DATADIR}/applications)
+# Desktop integration files are Linux-only (Flatpak/AppImage/native installs).
+if(UNIX AND NOT APPLE)
+    configure_file(${CMAKE_SOURCE_DIR}/packaging/sc64gui.desktop.in
+                   ${CMAKE_BINARY_DIR}/${APP_ID}.desktop @ONLY)
+    install(FILES ${CMAKE_BINARY_DIR}/${APP_ID}.desktop
+            DESTINATION ${CMAKE_INSTALL_DATADIR}/applications)
 
-configure_file(${CMAKE_SOURCE_DIR}/packaging/sc64gui.metainfo.xml.in
-               ${CMAKE_BINARY_DIR}/${APP_ID}.metainfo.xml @ONLY)
-install(FILES ${CMAKE_BINARY_DIR}/${APP_ID}.metainfo.xml
-        DESTINATION ${CMAKE_INSTALL_DATADIR}/metainfo)
+    configure_file(${CMAKE_SOURCE_DIR}/packaging/sc64gui.metainfo.xml.in
+                   ${CMAKE_BINARY_DIR}/${APP_ID}.metainfo.xml @ONLY)
+    install(FILES ${CMAKE_BINARY_DIR}/${APP_ID}.metainfo.xml
+            DESTINATION ${CMAKE_INSTALL_DATADIR}/metainfo)
 
-install(FILES ${CMAKE_SOURCE_DIR}/packaging/sc64gui.svg
-        DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/scalable/apps
-        RENAME ${APP_ID}.svg)
+    install(FILES ${CMAKE_SOURCE_DIR}/packaging/sc64gui.svg
+            DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/scalable/apps
+            RENAME ${APP_ID}.svg)
+endif()
